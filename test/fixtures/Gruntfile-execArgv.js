@@ -1,8 +1,10 @@
 module.exports = function(grunt) {
 
+  var util = require('../../');
+
   grunt.registerTask('default', function(text) {
     var done = this.async();
-    grunt.util.spawn({
+    util.spawn({
       grunt: true,
       args: ['--gruntfile', 'Gruntfile-execArgv-child.js'],
     }, function(err, result, code) {

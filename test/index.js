@@ -1,8 +1,6 @@
 'use strict';
 
-var grunt = {
-  util: require('../')
-};
+var util = require('../');
 
 var fs = require('fs');
 var path = require('path');
@@ -16,7 +14,7 @@ exports['util.callbackify'] = {
     function add(a, b) {
       return a + b;
     }
-    grunt.util.callbackify(add)(1, 2, function(result) {
+    util.callbackify(add)(1, 2, function(result) {
       test.equal(result, 3, 'should be the correct result.');
       test.done();
     });
@@ -27,7 +25,7 @@ exports['util.callbackify'] = {
     function add(a, b, done) {
       done(a + b);
     }
-    grunt.util.callbackify(add)(1, 2, function(result) {
+    util.callbackify(add)(1, 2, function(result) {
       test.equal(result, 3, 'should be the correct result.');
       test.done();
     });
@@ -38,7 +36,7 @@ exports['util.callbackify'] = {
     function add(a, b, done) {
       setTimeout(done.bind(null, a + b), 0);
     }
-    grunt.util.callbackify(add)(1, 2, function(result) {
+    util.callbackify(add)(1, 2, function(result) {
       test.equal(result, 3, 'should be the correct result.');
       test.done();
     });
@@ -50,19 +48,19 @@ exports['util'] = {
     test.expect(9);
     var origError = new Error('Original error.');
 
-    var err = grunt.util.error('Test message.');
+    var err = util.error('Test message.');
     test.ok(err instanceof Error, 'Should be an Error.');
     test.equal(err.name, 'Error', 'Should be an Error.');
     test.equal(err.message, 'Test message.', 'Should have the correct message.');
 
-    err = grunt.util.error('Test message.', origError);
+    err = util.error('Test message.', origError);
     test.ok(err instanceof Error, 'Should be an Error.');
     test.equal(err.name, 'Error', 'Should be an Error.');
     test.equal(err.message, 'Test message.', 'Should have the correct message.');
     test.equal(err.origError, origError, 'Should reflect the original error.');
 
     var newError = new Error('Test message.');
-    err = grunt.util.error(newError, origError);
+    err = util.error(newError, origError);
     test.equal(err, newError, 'Should be the passed-in Error.');
     test.equal(err.origError, origError, 'Should reflect the original error.');
     test.done();
@@ -70,18 +68,18 @@ exports['util'] = {
   'linefeed': function(test) {
     test.expect(1);
     if (process.platform === 'win32') {
-      test.equal(grunt.util.linefeed, '\r\n', 'linefeed should be operating-system appropriate.');
+      test.equal(util.linefeed, '\r\n', 'linefeed should be operating-system appropriate.');
     } else {
-      test.equal(grunt.util.linefeed, '\n', 'linefeed should be operating-system appropriate.');
+      test.equal(util.linefeed, '\n', 'linefeed should be operating-system appropriate.');
     }
     test.done();
   },
   'normalizelf': function(test) {
     test.expect(1);
     if (process.platform === 'win32') {
-      test.equal(grunt.util.normalizelf('foo\nbar\r\nbaz\r\n\r\nqux\n\nquux'), 'foo\r\nbar\r\nbaz\r\n\r\nqux\r\n\r\nquux', 'linefeeds should be normalized');
+      test.equal(util.normalizelf('foo\nbar\r\nbaz\r\n\r\nqux\n\nquux'), 'foo\r\nbar\r\nbaz\r\n\r\nqux\r\n\r\nquux', 'linefeeds should be normalized');
     } else {
-      test.equal(grunt.util.normalizelf('foo\nbar\r\nbaz\r\n\r\nqux\n\nquux'), 'foo\nbar\nbaz\n\nqux\n\nquux', 'linefeeds should be normalized');
+      test.equal(util.normalizelf('foo\nbar\r\nbaz\r\n\r\nqux\n\nquux'), 'foo\nbar\nbaz\n\nqux\n\nquux', 'linefeeds should be normalized');
     }
     test.done();
   }
@@ -94,7 +92,7 @@ exports['util.spawn'] = {
   },
   'exit code 0': function(test) {
     test.expect(6);
-    grunt.util.spawn({
+    util.spawn({
       cmd: process.execPath,
       args: [ this.script, 0 ],
     }, function(err, result, code) {
@@ -109,7 +107,7 @@ exports['util.spawn'] = {
   },
   'exit code 0, fallback': function(test) {
     test.expect(6);
-    grunt.util.spawn({
+    util.spawn({
       cmd: process.execPath,
       args: [ this.script, 0 ],
       fallback: 'ignored if exit code is 0'
@@ -125,7 +123,7 @@ exports['util.spawn'] = {
   },
   'non-zero exit code': function(test) {
     test.expect(7);
-    grunt.util.spawn({
+    util.spawn({
       cmd: process.execPath,
       args: [ this.script, 123 ],
     }, function(err, result, code) {
@@ -141,7 +139,7 @@ exports['util.spawn'] = {
   },
   'non-zero exit code, fallback': function(test) {
     test.expect(6);
-    grunt.util.spawn({
+    util.spawn({
       cmd: process.execPath,
       args: [ this.script, 123 ],
       fallback: 'custom fallback'
@@ -157,7 +155,7 @@ exports['util.spawn'] = {
   },
   'cmd not found': function(test) {
     test.expect(3);
-    grunt.util.spawn({
+    util.spawn({
       cmd: 'nodewtfmisspelled',
     }, function(err, result, code) {
       test.ok(err instanceof Error);
@@ -168,7 +166,7 @@ exports['util.spawn'] = {
   },
   'cmd not found, fallback': function(test) {
     test.expect(4);
-    grunt.util.spawn({
+    util.spawn({
       cmd: 'nodewtfmisspelled',
       fallback: 'use a fallback or good luck'
     }, function(err, result, code) {
@@ -182,7 +180,7 @@ exports['util.spawn'] = {
   'cmd not in path': function(test) {
     test.expect(6);
     var win32 = process.platform === 'win32';
-    grunt.util.spawn({
+    util.spawn({
       cmd: 'test\\fixtures\\exec' + (win32 ? '.cmd' : '.sh'),
     }, function(err, result, code) {
       test.equals(err, null);
@@ -197,7 +195,7 @@ exports['util.spawn'] = {
   'cmd not in path (with cwd)': function(test) {
     test.expect(6);
     var win32 = process.platform === 'win32';
-    grunt.util.spawn({
+    util.spawn({
       cmd: './exec' + (win32 ? '.cmd' : '.sh'),
       opts: {cwd: 'test/fixtures'},
     }, function(err, result, code) {
@@ -212,7 +210,7 @@ exports['util.spawn'] = {
   },
   'grunt': function(test) {
     test.expect(3);
-    grunt.util.spawn({
+    util.spawn({
       grunt: true,
       args: [ '--gruntfile', 'test/fixtures/Gruntfile-print-text.js', 'print:foo' ],
     }, function(err, result, code) {
@@ -224,7 +222,7 @@ exports['util.spawn'] = {
   },
   'grunt (with cwd)': function(test) {
     test.expect(3);
-    grunt.util.spawn({
+    util.spawn({
       grunt: true,
       args: [ '--gruntfile', 'Gruntfile-print-text.js', 'print:foo' ],
       opts: {cwd: 'test/fixtures'},
@@ -237,7 +235,7 @@ exports['util.spawn'] = {
   },
   'grunt passes execArgv': function(test) {
     test.expect(3);
-    grunt.util.spawn({
+    util.spawn({
       cmd: process.execPath,
       args: [ '--harmony', process.argv[1], '--gruntfile', 'test/fixtures/Gruntfile-execArgv.js'],
     }, function(err, result, code) {
@@ -250,7 +248,7 @@ exports['util.spawn'] = {
   'grunt result.toString() with error': function(test) {
     // grunt.log.error uses standard out, to be fixed in 0.5.
     test.expect(4);
-    grunt.util.spawn({
+    util.spawn({
       grunt: true,
       args: [ 'nonexistentTask' ]
     }, function(err, result, code) {
@@ -267,7 +265,7 @@ exports['util.spawn'] = {
     var stderrFile = new Tempfile();
     var stdout = fs.openSync(stdoutFile.path, 'a');
     var stderr = fs.openSync(stderrFile.path, 'a');
-    var child = grunt.util.spawn({
+    var child = util.spawn({
       cmd: process.execPath,
       args: [ this.script, 0 ],
       opts: {stdio: [null, stdout, stderr]},
@@ -292,7 +290,7 @@ exports['util.spawn.multibyte'] = {
   },
   'partial stdout': function(test) {
     test.expect(4);
-    grunt.util.spawn({
+    util.spawn({
       cmd: process.execPath,
       args: [ this.script ],
     }, function(err, result, code) {
@@ -307,9 +305,9 @@ exports['util.spawn.multibyte'] = {
 
 exports['util.underscore.string'] = function(test) {
   test.expect(4);
-  test.equals(grunt.util._.trim('    foo     '), 'foo', 'Should have trimmed the string.');
-  test.equals(grunt.util._.capitalize('foo'), 'Foo', 'Should have capitalized the first letter.');
-  test.equals(grunt.util._.words('one two three').length, 3, 'Should have counted three words.');
-  test.ok(grunt.util._.isBlank(' '), 'Should be blank.');
+  test.equals(util._.trim('    foo     '), 'foo', 'Should have trimmed the string.');
+  test.equals(util._.capitalize('foo'), 'Foo', 'Should have capitalized the first letter.');
+  test.equals(util._.words('one two three').length, 3, 'Should have counted three words.');
+  test.ok(util._.isBlank(' '), 'Should be blank.');
   test.done();
 };

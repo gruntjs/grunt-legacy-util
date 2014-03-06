@@ -1,4 +1,4 @@
-# grunt-util-deprecated
+# grunt-legacy-util
 > deprecated utilities from grunt
 
 `grunt.util.namespace` use [getobject]  
@@ -11,7 +11,7 @@
 `grunt.util.linefeed`  
 `grunt.util.normalizelf`  
 `grunt.util.kindOf` use [lodash]  
-`grunt.util.toArray` use [lodash]  
+`grunt.util.toArray`
 `grunt.util.repeat`  
 `grunt.util.pluralize`  
 `grunt.util.recurse` use [traverse]  

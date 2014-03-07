@@ -78,7 +78,7 @@ util.kindOf = function(value) {
 };
 
 // Coerce something to an Array.
-util.toArray = Function.call.bind(Array.prototype.slice);
+util.toArray = _.toArray;
 
 // Return the string `str` repeated `n` times.
 util.repeat = function(n, str) {

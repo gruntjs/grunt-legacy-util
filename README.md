@@ -1,6 +1,8 @@
 # grunt-legacy-util
 > deprecated utilities from grunt
 
+We are no longer supporting these APIs.  Where possible, please use the recommended modules in their place.  If you would like to support or improve any of these APIs, please notify us when you have published a backwards compatible npm module&mdash;we will then recommend its usage here.
+
 `grunt.util.namespace` use [getobject]  
 `grunt.util.hooker` use [hooker]  
 `grunt.util.async` use [async]  
@@ -16,7 +18,6 @@
 `grunt.util.pluralize`  
 `grunt.util.recurse` use [traverse]  
 `grunt.util.spawn`  
-
 
 [getobject]: https://www.npmjs.org/package/getobject
 [hooker]: https://www.npmjs.org/package/hooker

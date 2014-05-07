@@ -102,7 +102,7 @@ util.recurse = function recurse(value, fn, fnContinue) {
     return value.map(function(value) {
       return recurse(value, fn, fnContinue);
     });
-  } else if (util.kindOf(value) === 'object') {
+  } else if (util.kindOf(value) === 'object' && !Buffer.isBuffer(value)) {
     // If value is an object, recurse.
     obj = {};
     Object.keys(value).forEach(function(key) {

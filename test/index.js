@@ -319,13 +319,15 @@ exports['util.recurse'] = function(test) {
     str: 'foo',
     nul: null,
     undef: undefined,
-    arr: [1, 'foo', null, undefined, {a: 1, b: 'two'}],
+    buf: new Buffer(''),
+    arr: [1, 'foo', null, undefined, new Buffer(''), {a: 1, b: 'two'}],
     obj: {
       num: 2,
       str: 'bar',
       nul: null,
       undef: undefined,
-      arr: [2, 'bar', null, undefined, {c: 3, d: 'four'}],
+      buf: new Buffer(''),
+      arr: [2, 'bar', null, undefined, new Buffer(''), {c: 3, d: 'four'}],
     }
   }, function(v) {
     if (v === null) {
@@ -341,13 +343,15 @@ exports['util.recurse'] = function(test) {
     str: 'foo9',
     nul: 'null!',
     undef: 'undefined!',
-    arr: [10, 'foo9', 'null!', 'undefined!', {a: 10, b: 'two9'}],
+    buf: '9',
+    arr: [10, 'foo9', 'null!', 'undefined!', '9', {a: 10, b: 'two9'}],
     obj: {
       num: 11,
       str: 'bar9',
       nul: 'null!',
       undef: 'undefined!',
-      arr: [11, 'bar9', 'null!', 'undefined!', {c: 12, d: 'four9'}],
+      buf: '9',
+      arr: [11, 'bar9', 'null!', 'undefined!', '9', {c: 12, d: 'four9'}],
     }
   };
   test.deepEqual(actual, expected, 'Should have recursed over primitives, objects, arrays.');

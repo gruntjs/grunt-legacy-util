@@ -1,6 +1,10 @@
 # grunt-legacy-util
 > deprecated utilities from grunt
 
+[![Build Status](https://secure.travis-ci.org/gruntjs/grunt-legacy-util.png?branch=master)](http://travis-ci.org/gruntjs/grunt-legacy-util)
+[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+
+
 We are no longer supporting these APIs.  Where possible, please use the recommended modules in their place.  If you would like to support or improve any of these APIs, please notify us when you have published a backwards compatible npm module&mdash;we will then recommend its usage here.
 
 `grunt.util.namespace` use [getobject]  

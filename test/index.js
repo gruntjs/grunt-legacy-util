@@ -311,3 +311,46 @@ exports['util.underscore.string'] = function(test) {
   test.ok(util._.isBlank(' '), 'Should be blank.');
   test.done();
 };
+
+exports['util.recurse'] = function(test) {
+  test.expect(1);
+  var actual = util.recurse({
+    num: 1,
+    str: 'foo',
+    nul: null,
+    undef: undefined,
+    arr: [1, 'foo', null, undefined, {a: 1, b: 'two'}],
+    obj: {
+      num: 2,
+      str: 'bar',
+      nul: null,
+      undef: undefined,
+      arr: [2, 'bar', null, undefined, {c: 3, d: 'four'}],
+    }
+  }, function(v) {
+    if (v === null) {
+      return 'null!';
+    } else if (v === undefined) {
+      return 'undefined!';
+    } else {
+      return v + 9;
+    }
+  });
+  var expected = {
+    num: 10,
+    str: 'foo9',
+    nul: 'null!',
+    undef: 'undefined!',
+    arr: [10, 'foo9', 'null!', 'undefined!', {a: 10, b: 'two9'}],
+    obj: {
+      num: 11,
+      str: 'bar9',
+      nul: 'null!',
+      undef: 'undefined!',
+      arr: [11, 'bar9', 'null!', 'undefined!', {c: 12, d: 'four9'}],
+    }
+  };
+  test.deepEqual(actual, expected, 'Should have recursed over primitives, objects, arrays.');
+
+  test.done();
+};

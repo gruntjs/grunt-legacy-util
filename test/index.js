@@ -496,4 +496,42 @@ exports['util.recurse'] = {
     test.deepEqual(actual, expected, 'Should enumerate inherited object properties.');
     test.done();
   },
+  'circular references': function(test) {
+    test.expect(5);
+    test.doesNotThrow(function() {
+      var obj = {
+        // wat
+        a:[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]],
+        // does
+        b:[[[[],[[[],[[[[],[[[],[[[],[[[],[[[],[[[[],[[]]]]]]]]]]]]]]]]]]]]],
+        // it
+        c:{d:{e:{f:{g:{h:{i:{j:{k:{l:{m:{n:{o:{p:{q:{r:{s:{}}}}}}}}}}}}}}}}},
+        // mean
+        t:[{u:[{v:[[[[],[[[],[[[{w:[{x:[[[],[[[{y:[[1]]}]]]]]}]}]]]]]]]]}]}],
+      };
+      util.recurse(obj, function(v) { return v; });
+    }, 'Should not throw when no circular reference is detected.');
+    test.throws(function() {
+      var obj = {a: 1, b: 2};
+      obj.obj = obj;
+      util.recurse(obj, function(v) { return v; });
+    }, /Circular/, 'Should throw when a circular reference is detected.');
+    test.throws(function() {
+      var obj = {a: 1, b: 2};
+      obj.arr = [1, 2, obj, 3, 4];
+      util.recurse(obj, function(v) { return v; });
+    }, /Circular/, 'Should throw when a circular reference is detected.');
+    test.throws(function() {
+      var obj = {a: 1, b: 2};
+      obj.arr = [{a:[1,{b:[2,{c:[3,obj,4]},5]},6]},7];
+      util.recurse(obj, function(v) { return v; });
+    }, /Circular/, 'Should throw when a circular reference is detected.');
+    test.throws(function() {
+      var obj = {a: 1, b: 2};
+      obj.arr = [];
+      obj.arr.push(0,{a:[1,{b:[2,{c:[3,obj.arr,4]},5]},6]},7);
+      util.recurse(obj, function(v) { return v; });
+    }, /Circular/, 'Should throw when a circular reference is detected.');
+    test.done();
+  },
 };

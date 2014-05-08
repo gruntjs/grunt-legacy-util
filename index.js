@@ -93,7 +93,7 @@ util.pluralize = function(n, str, separator) {
 
 // Recurse through objects and arrays, executing fn for each non-object.
 util.recurse = function recurse(value, fn, fnContinue) {
-  var obj;
+  var obj, key;
   if (fnContinue && fnContinue(value) === false) {
     // Skip value if necessary.
     return value;
@@ -105,9 +105,9 @@ util.recurse = function recurse(value, fn, fnContinue) {
   } else if (util.kindOf(value) === 'object' && !Buffer.isBuffer(value)) {
     // If value is an object, recurse.
     obj = {};
-    Object.keys(value).forEach(function(key) {
+    for (key in value) {
       obj[key] = recurse(value[key], fn, fnContinue);
-    });
+    }
     return obj;
   } else {
     // Otherwise pass value into fn and return.

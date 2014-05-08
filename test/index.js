@@ -482,4 +482,18 @@ exports['util.recurse'] = {
     test.deepEqual(actual, expected, 'Should not mangle Buffer instances.');
     test.done();
   },
+  'inherited properties': function(test) {
+    test.expect(1);
+    var actual = util.recurse({
+      obj: Object.create({num: 1}, {str: {value: 'foo', enumerable: true}}),
+    }, this.typeColonValue);
+    var expected = {
+      obj: {
+        num: 'number:1',
+        str: 'string:foo',
+      }
+    };
+    test.deepEqual(actual, expected, 'Should enumerate inherited object properties.');
+    test.done();
+  },
 };

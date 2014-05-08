@@ -312,49 +312,174 @@ exports['util.underscore.string'] = function(test) {
   test.done();
 };
 
-exports['util.recurse'] = function(test) {
-  test.expect(1);
-  var actual = util.recurse({
-    num: 1,
-    str: 'foo',
-    nul: null,
-    undef: undefined,
-    buf: new Buffer(''),
-    arr: [1, 'foo', null, undefined, new Buffer(''), {a: 1, b: 'two'}],
-    obj: {
-      num: 2,
-      str: 'bar',
+function getType(val) {
+  if (Buffer.isBuffer(val)) { return 'buffer'; }
+  return Object.prototype.toString.call(val).slice(8, -1).toLowerCase();
+}
+
+exports['util.recurse'] = {
+  setUp: function(done) {
+    this.typeColonValue = function(val) {
+      return getType(val) + ':' + val;
+    };
+    done();
+  },
+  'primitives': function(test) {
+    test.expect(1);
+    var actual = util.recurse({
+      bool: true,
+      num: 1,
+      str: 'foo',
       nul: null,
       undef: undefined,
-      buf: new Buffer(''),
-      arr: [2, 'bar', null, undefined, new Buffer(''), {c: 3, d: 'four'}],
-    }
-  }, function(v) {
-    if (v === null) {
-      return 'null!';
-    } else if (v === undefined) {
-      return 'undefined!';
-    } else {
-      return v + 9;
-    }
-  });
-  var expected = {
-    num: 10,
-    str: 'foo9',
-    nul: 'null!',
-    undef: 'undefined!',
-    buf: '9',
-    arr: [10, 'foo9', 'null!', 'undefined!', '9', {a: 10, b: 'two9'}],
-    obj: {
-      num: 11,
-      str: 'bar9',
-      nul: 'null!',
-      undef: 'undefined!',
-      buf: '9',
-      arr: [11, 'bar9', 'null!', 'undefined!', '9', {c: 12, d: 'four9'}],
-    }
-  };
-  test.deepEqual(actual, expected, 'Should have recursed over primitives, objects, arrays.');
-
-  test.done();
+    }, this.typeColonValue);
+    var expected = {
+      bool: 'boolean:true',
+      num: 'number:1',
+      str: 'string:foo',
+      nul: 'null:null',
+      undef: 'undefined:undefined',
+    };
+    test.deepEqual(actual, expected, 'Should process primitive values.');
+    test.done();
+  },
+  'array': function(test) {
+    test.expect(1);
+    var actual = util.recurse({
+      arr: [
+        true,
+        1,
+        'foo',
+        null,
+        undefined,
+        [
+          true,
+          1,
+          'foo',
+          null,
+          undefined,
+        ],
+      ],
+    }, this.typeColonValue);
+    var expected = {
+      arr: [
+        'boolean:true',
+        'number:1',
+        'string:foo',
+        'null:null',
+        'undefined:undefined',
+        [
+          'boolean:true',
+          'number:1',
+          'string:foo',
+          'null:null',
+          'undefined:undefined',
+        ],
+      ],
+    };
+    test.deepEqual(actual, expected, 'Should recurse over arrays.');
+    test.done();
+  },
+  'object': function(test) {
+    test.expect(1);
+    var actual = util.recurse({
+      obj: {
+        bool: true,
+        num: 1,
+        str: 'foo',
+        nul: null,
+        undef: undefined,
+        obj: {
+          bool: true,
+          num: 1,
+          str: 'foo',
+          nul: null,
+          undef: undefined,
+        },
+      },
+    }, this.typeColonValue);
+    var expected = {
+      obj: {
+        bool: 'boolean:true',
+        num: 'number:1',
+        str: 'string:foo',
+        nul: 'null:null',
+        undef: 'undefined:undefined',
+        obj: {
+          bool: 'boolean:true',
+          num: 'number:1',
+          str: 'string:foo',
+          nul: 'null:null',
+          undef: 'undefined:undefined',
+        },
+      },
+    };
+    test.deepEqual(actual, expected, 'Should recurse over objects.');
+    test.done();
+  },
+  'array in object': function(test) {
+    test.expect(1);
+    var actual = util.recurse({
+      obj: {
+        arr: [
+          true,
+          1,
+          'foo',
+          null,
+          undefined,
+        ],
+      },
+    }, this.typeColonValue);
+    var expected = {
+      obj: {
+        arr: [
+          'boolean:true',
+          'number:1',
+          'string:foo',
+          'null:null',
+          'undefined:undefined',
+        ],
+      },
+    };
+    test.deepEqual(actual, expected, 'Should recurse over arrays in objects.');
+    test.done();
+  },
+  'object in array': function(test) {
+    test.expect(1);
+    var actual = util.recurse({
+      arr: [
+        true,
+        {
+          num: 1,
+          str: 'foo',
+        },
+        null,
+        undefined,
+      ],
+    }, this.typeColonValue);
+    var expected = {
+      arr: [
+        'boolean:true',
+        {
+          num: 'number:1',
+          str: 'string:foo',
+        },
+        'null:null',
+        'undefined:undefined',
+      ],
+    };
+    test.deepEqual(actual, expected, 'Should recurse over objects in arrays.');
+    test.done();
+  },
+  'buffer': function(test) {
+    test.expect(1);
+    var actual = util.recurse({
+      buf: new Buffer('buf'),
+    }, this.typeColonValue);
+    var expected = {
+      buf: 'buffer:buf',
+    };
+    test.deepEqual(actual, expected, 'Should not mangle Buffer instances.');
+    test.done();
+  },
 };

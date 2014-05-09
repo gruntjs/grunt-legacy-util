@@ -5,7 +5,7 @@
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 
-We are no longer supporting these APIs.  Where possible, please use the recommended modules in their place.  If you would like to support or improve any of these APIs, please notify us when you have published a backwards compatible npm module&mdash;we will then recommend its usage here.
+With the next major release of Grunt, we will no longer support these APIs.  Where possible, please use the recommended modules in their place.  If you would like to support or improve any of these APIs, please notify us when you have published a backwards compatible npm module&mdash;we will then recommend its usage here.
 
 `grunt.util.namespace` use [getobject]  
 `grunt.util.hooker` use [hooker]  
@@ -28,4 +28,4 @@ We are no longer supporting these APIs.  Where possible, please use the recommen
 [async]: https://www.npmjs.org/package/async
 [lodash]: https://www.npmjs.org/package/lodash
 [exit]: https://www.npmjs.org/package/exit
-[traverse]: https://www.npmjs.org/package/lodash
+[traverse]: https://www.npmjs.org/package/traverse

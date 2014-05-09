@@ -94,8 +94,11 @@ util.pluralize = function(n, str, separator) {
 // Recurse through objects and arrays, executing fn for each non-object.
 util.recurse = function(value, fn, fnContinue) {
   function recurse(value, fn, fnContinue, state) {
+    var error;
     if (state.objs.indexOf(value) !== -1) {
-      throw new Error('Circular reference detected (' + state.path + ')');
+      error = new Error('Circular reference detected (' + state.path + ')');
+      error.path = state.path;
+      throw error;
     }
     var obj, key;
     if (fnContinue && fnContinue(value) === false) {

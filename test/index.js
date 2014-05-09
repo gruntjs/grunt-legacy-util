@@ -506,7 +506,8 @@ exports['util.recurse'] = {
     test.expect(6);
     function assertErrorWithPath(expectedPath) {
       return function(actual) {
-        return actual.message === 'Circular reference detected (' + expectedPath + ')';
+        return actual.path === expectedPath &&
+          actual.message === 'Circular reference detected (' + expectedPath + ')';
       };
     }
     test.doesNotThrow(function() {

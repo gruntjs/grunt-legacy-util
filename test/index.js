@@ -319,8 +319,11 @@ function getType(val) {
 
 exports['util.recurse'] = {
   setUp: function(done) {
-    this.typeColonValue = function(val) {
-      return getType(val) + ':' + val;
+    this.typeValue = function(value) {
+      return {
+        value: value,
+        type: getType(value),
+      };
     };
     done();
   },
@@ -332,13 +335,13 @@ exports['util.recurse'] = {
       str: 'foo',
       nul: null,
       undef: undefined,
-    }, this.typeColonValue);
+    }, this.typeValue);
     var expected = {
-      bool: 'boolean:true',
-      num: 'number:1',
-      str: 'string:foo',
-      nul: 'null:null',
-      undef: 'undefined:undefined',
+      bool: {type: 'boolean', value: true},
+      num: {type: 'number', value: 1},
+      str: {type: 'string', value: 'foo'},
+      nul: {type: 'null', value: null},
+      undef: {type: 'undefined', value: undefined},
     };
     test.deepEqual(actual, expected, 'Should process primitive values.');
     test.done();
@@ -360,20 +363,20 @@ exports['util.recurse'] = {
           undefined,
         ],
       ],
-    }, this.typeColonValue);
+    }, this.typeValue);
     var expected = {
       arr: [
-        'boolean:true',
-        'number:1',
-        'string:foo',
-        'null:null',
-        'undefined:undefined',
+        {type: 'boolean', value: true},
+        {type: 'number', value: 1},
+        {type: 'string', value: 'foo'},
+        {type: 'null', value: null},
+        {type: 'undefined', value: undefined},
         [
-          'boolean:true',
-          'number:1',
-          'string:foo',
-          'null:null',
-          'undefined:undefined',
+          {type: 'boolean', value: true},
+          {type: 'number', value: 1},
+          {type: 'string', value: 'foo'},
+          {type: 'null', value: null},
+          {type: 'undefined', value: undefined},
         ],
       ],
     };
@@ -397,20 +400,20 @@ exports['util.recurse'] = {
           undef: undefined,
         },
       },
-    }, this.typeColonValue);
+    }, this.typeValue);
     var expected = {
       obj: {
-        bool: 'boolean:true',
-        num: 'number:1',
-        str: 'string:foo',
-        nul: 'null:null',
-        undef: 'undefined:undefined',
+        bool: {type: 'boolean', value: true},
+        num: {type: 'number', value: 1},
+        str: {type: 'string', value: 'foo'},
+        nul: {type: 'null', value: null},
+        undef: {type: 'undefined', value: undefined},
         obj: {
-          bool: 'boolean:true',
-          num: 'number:1',
-          str: 'string:foo',
-          nul: 'null:null',
-          undef: 'undefined:undefined',
+          bool: {type: 'boolean', value: true},
+          num: {type: 'number', value: 1},
+          str: {type: 'string', value: 'foo'},
+          nul: {type: 'null', value: null},
+          undef: {type: 'undefined', value: undefined},
         },
       },
     };
@@ -429,15 +432,15 @@ exports['util.recurse'] = {
           undefined,
         ],
       },
-    }, this.typeColonValue);
+    }, this.typeValue);
     var expected = {
       obj: {
         arr: [
-          'boolean:true',
-          'number:1',
-          'string:foo',
-          'null:null',
-          'undefined:undefined',
+          {type: 'boolean', value: true},
+          {type: 'number', value: 1},
+          {type: 'string', value: 'foo'},
+          {type: 'null', value: null},
+          {type: 'undefined', value: undefined},
         ],
       },
     };
@@ -456,16 +459,16 @@ exports['util.recurse'] = {
         null,
         undefined,
       ],
-    }, this.typeColonValue);
+    }, this.typeValue);
     var expected = {
       arr: [
-        'boolean:true',
+        {type: 'boolean', value: true},
         {
-          num: 'number:1',
-          str: 'string:foo',
+          num: {type: 'number', value: 1},
+          str: {type: 'string', value: 'foo'},
         },
-        'null:null',
-        'undefined:undefined',
+        {type: 'null', value: null},
+        {type: 'undefined', value: undefined},
       ],
     };
     test.deepEqual(actual, expected, 'Should recurse over objects in arrays.');
@@ -475,9 +478,9 @@ exports['util.recurse'] = {
     test.expect(1);
     var actual = util.recurse({
       buf: new Buffer('buf'),
-    }, this.typeColonValue);
+    }, this.typeValue);
     var expected = {
-      buf: 'buffer:buf',
+      buf: {type: 'buffer', value: new Buffer('buf')},
     };
     test.deepEqual(actual, expected, 'Should not mangle Buffer instances.');
     test.done();
@@ -485,12 +488,15 @@ exports['util.recurse'] = {
   'inherited properties': function(test) {
     test.expect(1);
     var actual = util.recurse({
-      obj: Object.create({num: 1}, {str: {value: 'foo', enumerable: true}}),
-    }, this.typeColonValue);
+      obj: Object.create({num: 1}, {
+        str: {value: 'foo', enumerable: true},
+        ignored: {value: 'ignored', enumerable: false},
+      }),
+    }, this.typeValue);
     var expected = {
       obj: {
-        num: 'number:1',
-        str: 'string:foo',
+        num: {type: 'number', value: 1},
+        str: {type: 'string', value: 'foo'},
       }
     };
     test.deepEqual(actual, expected, 'Should enumerate inherited object properties.');

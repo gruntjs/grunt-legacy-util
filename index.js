@@ -93,9 +93,9 @@ util.pluralize = function(n, str, separator) {
 
 // Recurse through objects and arrays, executing fn for each non-object.
 util.recurse = function(value, fn, fnContinue) {
-  function recurse(value, fn, fnContinue, objs) {
-    if (objs.indexOf(value) !== -1) {
-      throw new Error('Circular reference detected.');
+  function recurse(value, fn, fnContinue, state) {
+    if (state.objs.indexOf(value) !== -1) {
+      throw new Error('Circular reference detected (' + state.path + ')');
     }
     var obj, key;
     if (fnContinue && fnContinue(value) === false) {
@@ -103,14 +103,20 @@ util.recurse = function(value, fn, fnContinue) {
       return value;
     } else if (util.kindOf(value) === 'array') {
       // If value is an array, recurse.
-      return value.map(function(item) {
-        return recurse(item, fn, fnContinue, objs.concat([value]));
+      return value.map(function(item, index) {
+        return recurse(item, fn, fnContinue, {
+          objs: state.objs.concat([value]),
+          path: state.path + '[' + index + ']',
+        });
       });
     } else if (util.kindOf(value) === 'object' && !Buffer.isBuffer(value)) {
       // If value is an object, recurse.
       obj = {};
       for (key in value) {
-        obj[key] = recurse(value[key], fn, fnContinue, objs.concat([value]));
+        obj[key] = recurse(value[key], fn, fnContinue, {
+          objs: state.objs.concat([value]),
+          path: state.path + (/\W/.test(key) ? '["' + key + '"]' : '.' + key),
+        });
       }
       return obj;
     } else {
@@ -118,7 +124,7 @@ util.recurse = function(value, fn, fnContinue) {
       return fn(value);
     }
   }
-  return recurse(value, fn, fnContinue, []);
+  return recurse(value, fn, fnContinue, {objs: [], path: ''});
 };
 
 // Spawn a child process, capturing its stdout and stderr.

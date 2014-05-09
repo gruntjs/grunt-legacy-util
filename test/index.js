@@ -503,7 +503,12 @@ exports['util.recurse'] = {
     test.done();
   },
   'circular references': function(test) {
-    test.expect(5);
+    test.expect(6);
+    function assertErrorWithPath(expectedPath) {
+      return function(actual) {
+        return actual.message === 'Circular reference detected (' + expectedPath + ')';
+      };
+    }
     test.doesNotThrow(function() {
       var obj = {
         // wat
@@ -521,23 +526,28 @@ exports['util.recurse'] = {
       var obj = {a: 1, b: 2};
       obj.obj = obj;
       util.recurse(obj, function(v) { return v; });
-    }, /Circular/, 'Should throw when a circular reference is detected.');
+    }, assertErrorWithPath('.obj'), 'Should throw when a circular reference is detected.');
+    test.throws(function() {
+      var obj = {a:{'b b':{'c-c':{d_d:{e:{f:{g:{h:{i:{j:{k:{l:{}}}}}}}}}}}}};
+      obj.a['b b']['c-c'].d_d.e.f.g.h.i.j.k.l.obj = obj;
+      util.recurse(obj, function(v) { return v; });
+    }, assertErrorWithPath('.a["b b"]["c-c"].d_d.e.f.g.h.i.j.k.l.obj'), 'Should throw when a circular reference is detected.');
     test.throws(function() {
       var obj = {a: 1, b: 2};
       obj.arr = [1, 2, obj, 3, 4];
       util.recurse(obj, function(v) { return v; });
-    }, /Circular/, 'Should throw when a circular reference is detected.');
+    }, assertErrorWithPath('.arr[2]'), 'Should throw when a circular reference is detected.');
     test.throws(function() {
       var obj = {a: 1, b: 2};
       obj.arr = [{a:[1,{b:[2,{c:[3,obj,4]},5]},6]},7];
       util.recurse(obj, function(v) { return v; });
-    }, /Circular/, 'Should throw when a circular reference is detected.');
+    }, assertErrorWithPath('.arr[0].a[1].b[1].c[1]'), 'Should throw when a circular reference is detected.');
     test.throws(function() {
       var obj = {a: 1, b: 2};
       obj.arr = [];
       obj.arr.push(0,{a:[1,{b:[2,{c:[3,obj.arr,4]},5]},6]},7);
       util.recurse(obj, function(v) { return v; });
-    }, /Circular/, 'Should throw when a circular reference is detected.');
+    }, assertErrorWithPath('.arr[1].a[1].b[1].c[1]'), 'Should throw when a circular reference is detected.');
     test.done();
   },
 };

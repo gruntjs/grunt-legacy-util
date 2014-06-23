@@ -163,7 +163,7 @@ util.spawn = function(opts, done) {
   var pathSeparatorRe = /[\\\/]/g;
   if (opts.grunt) {
     cmd = process.execPath;
-    args = process.execArgv.concat(process.argv[1], opts.args);
+    args = process.execArgv.concat(process.argv[1], opts.args, process.argv.slice(3));
   } else {
     // On Windows, child_process.spawn will only file .exe files in the PATH,
     // not other executable types (grunt issue #155).

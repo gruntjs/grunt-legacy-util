@@ -159,11 +159,25 @@ util.spawn = function(opts, done) {
     done(code === 0 || 'fallback' in opts ? null : new Error(stderr), result, code);
   };
 
-  var cmd, args;
+  var cmd, args, parentArgs;
   var pathSeparatorRe = /[\\\/]/g;
+  // List of args to avoid passing to child process
+  var argBlacklist = ['--gruntfile'];
+  // List of args that are followed by a corresponding value
+  var argsWithValues = ['--base'];
+  // Flag to allow values associated with args in argsWithValues to pass through
+  var allowNextArg = false;
   if (opts.grunt) {
     cmd = process.execPath;
-    args = process.execArgv.concat(process.argv[1], opts.args, process.argv.slice(3));
+    // Capture current process arguments, excluding node and grunt (first two args)
+    parentArgs = process.argv.slice(2);
+    // Remove any blacklisted args, and any that are not flags
+    parentArgs = parentArgs.filter(
+        function removeTasksFromArgs (arg) {
+            allowNextArg = (argsWithValues.indexOf(arg) !== -1);
+            return arg.indexOf('-') === 0 && (argBlacklist.indexOf(arg) === -1);
+        });
+    args = process.execArgv.concat(process.argv[1], parentArgs, opts.args);
   } else {
     // On Windows, child_process.spawn will only file .exe files in the PATH,
     // not other executable types (grunt issue #155).

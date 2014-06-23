@@ -267,8 +267,6 @@ exports['util.spawn'] = {
       cmd: process.execPath,
       args: [ process.argv[1], '--gruntfile', 'test/fixtures/Gruntfile-argv.js', '--no-write'],
     }, function(err, result, code) {
-      //test.equals(err, null, 'spawning a child and grandchild with --gruntfile fails');
-      //test.equals(code, 0, 'spawning a child and grandchild with --gruntfile fails');
       test.equals(err, null);
       test.equals(code, 0);
       test.ok(/^OUTPUT: --no-write/m.test(result.stdout), 'spawning child and grandchild with --gruntfile fails.');

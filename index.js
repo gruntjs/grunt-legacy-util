@@ -174,8 +174,13 @@ util.spawn = function(opts, done) {
     // Remove any blacklisted args, and any that are not flags
     parentArgs = parentArgs.filter(
         function removeTasksFromArgs (arg) {
+            var allow = false;
+            if (allowNextArg ||
+                (arg.indexOf('-') === 0 && argBlacklist.indexOf(arg) === -1)) {
+                allow = true;
+            }
             allowNextArg = (argsWithValues.indexOf(arg) !== -1);
-            return arg.indexOf('-') === 0 && (argBlacklist.indexOf(arg) === -1);
+            return allow;
         });
     args = process.execArgv.concat(process.argv[1], parentArgs, opts.args);
   } else {

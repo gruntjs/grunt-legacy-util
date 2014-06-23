@@ -245,6 +245,50 @@ exports['util.spawn'] = {
       test.done();
     });
   },
+  'grunt passes parent argv': function(test) {
+    test.expect(3);
+    util.spawn({
+      cmd: process.execPath,
+      args: [ process.argv[1], '--gruntfile', 'test/fixtures/Gruntfile-argv.js', '--no-write'],
+    }, function(err, result, code) {
+      test.equals(err, null);
+      test.equals(code, 0);
+      test.ok(/^OUTPUT: --no-write/m.test(result.stdout), 'stdout should contain passed through process.argv.');
+      test.done();
+    });
+  },
+  'grunt does not pass --gruntfile to child': function(test) {
+    // Note: this is exactly the same test as the one above
+    // All of the grunt-spawn tests are also testing this condition, as they will fail if --gruntfile is passed
+    // It is duplicated here to be sure that future changes do not 
+    // neglect to test this condition.
+    test.expect(3);
+    util.spawn({
+      cmd: process.execPath,
+      args: [ process.argv[1], '--gruntfile', 'test/fixtures/Gruntfile-argv.js', '--no-write'],
+    }, function(err, result, code) {
+      //test.equals(err, null, 'spawning a child and grandchild with --gruntfile fails');
+      //test.equals(code, 0, 'spawning a child and grandchild with --gruntfile fails');
+      test.equals(err, null);
+      test.equals(code, 0);
+      test.ok(/^OUTPUT: --no-write/m.test(result.stdout), 'spawning child and grandchild with --gruntfile fails.');
+      test.done();
+    });
+  },
+  'grunt passes parent --base arg and val': function(test) {
+    var testBase = process.cwd() + '/test/fixtures';
+    var testBaseRegex = new RegExp('^OUTPUT: --base ' + testBase, 'm');
+    test.expect(3);
+    util.spawn({
+      cmd: process.execPath,
+      args: [ process.argv[1], '--gruntfile', 'test/fixtures/Gruntfile-argv.js', '--base', process.cwd() + '/test/fixtures'],
+    }, function(err, result, code) {
+      test.equals(err, null);
+      test.equals(code, 0);
+      test.ok(testBaseRegex.test(result.stdout), 'stdout should contain --base argument and value');
+      test.done();
+    });
+  },
   'grunt result.toString() with error': function(test) {
     // grunt.log.error uses standard out, to be fixed in 0.5.
     test.expect(4);

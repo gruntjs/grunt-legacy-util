@@ -162,7 +162,9 @@ util.spawn = function(opts, done) {
   var cmd, args, parentArgs;
   var pathSeparatorRe = /[\\\/]/g;
   // List of args that are followed by a corresponding value
-  var argsWithValues = ['--base', '--gruntfile'];
+  var argsWithValues = ['--gruntfile'];
+  // List of arguments that are not to be passed to the child process
+  var argBlacklist = ['--base', '-b'];
   // Flag to allow values associated with args in argsWithValues to pass through
   var allowNextArg = false;
   if (opts.grunt) {
@@ -173,7 +175,9 @@ util.spawn = function(opts, done) {
     parentArgs = parentArgs.filter(
         function removeTasksFromArgs (arg) {
             var allow = false;
-            if (allowNextArg || arg.indexOf('-') === 0) {
+            if (
+              allowNextArg ||
+              (argBlacklist.indexOf(arg) === -1 && arg.indexOf('-') === 0)) {
                 allow = true;
             }
             // Determine if next arg should be allowed

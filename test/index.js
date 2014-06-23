@@ -273,17 +273,17 @@ exports['util.spawn'] = {
       test.done();
     });
   },
-  'grunt passes parent --base arg and val': function(test) {
-    var testBase = process.cwd() + '/test/fixtures';
+  'grunt should not pass --base arg and val': function(test) {
+    var testBase = 'test/fixtures';
     var testBaseRegex = new RegExp('^OUTPUT: .*--base ' + testBase, 'm');
     test.expect(3);
     util.spawn({
       cmd: process.execPath,
-      args: [ process.argv[1], '--gruntfile', 'test/fixtures/Gruntfile-argv.js', '--base', process.cwd() + '/test/fixtures'],
+      args: [ process.argv[1], '--gruntfile', 'test/fixtures/Gruntfile-argv.js', '--base', testBase],
     }, function(err, result, code) {
-      test.equals(err, null);
-      test.equals(code, 0);
-      test.ok(testBaseRegex.test(result.stdout), 'stdout should contain --base argument and value');
+      test.equals(err, null, 'multi-generational grunt spawn with relative base path failed'); 
+      test.equals(code, 0, 'multi-generational grunt spawn with relative base path failed');
+      test.ok(!testBaseRegex.test(result.stdout), 'stdout should NOT contain --base argument and value');
       test.done();
     });
   },

@@ -1,7 +1,7 @@
 {
   "name": "grunt-legacy-util",
   "description": "Some old grunt utils provided for backwards compatibility.",
-  "version": "0.2.0",
+  "version": "1.0.0-rc1",
   "author": "\"Cowboy\" Ben Alman (http://benalman.com/)",
   "homepage": "http://gruntjs.com/",
   "repository": {

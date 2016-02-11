@@ -28,7 +28,7 @@
     "exit": "~0.1.1",
     "getobject": "~0.1.0",
     "hooker": "~0.2.3",
-    "lodash": "~3.10.1",
+    "lodash": "^4.3.0",
     "underscore.string": "~3.2.3",
     "which": "~1.2.1"
   },

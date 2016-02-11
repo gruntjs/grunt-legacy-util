@@ -20,7 +20,7 @@ With the next major release of Grunt, we will no longer support these APIs.  Whe
 `grunt.util.repeat`  
 `grunt.util.pluralize`  
 `grunt.util.recurse` use [traverse]  
-`grunt.util.spawn` use [require('child_process').spawn]
+`grunt.util.spawn` use [require('child_process').spawn]  
 
 [getobject]: https://www.npmjs.org/package/getobject
 [hooker]: https://www.npmjs.org/package/hooker
@@ -28,4 +28,4 @@ With the next major release of Grunt, we will no longer support these APIs.  Whe
 [lodash]: https://www.npmjs.org/package/lodash
 [exit]: https://www.npmjs.org/package/exit
 [traverse]: https://www.npmjs.org/package/traverse
-[require('child_process').spawn]: (https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options)
+[require('child_process').spawn]: https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options

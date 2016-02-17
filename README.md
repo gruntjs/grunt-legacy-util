@@ -2,7 +2,7 @@
 > deprecated utilities from grunt
 
 [![Build Status: Linux](https://travis-ci.org/gruntjs/grunt-legacy-util.svg?branch=master)](https://travis-ci.org/gruntjs/grunt-legacy-util)
-[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+[![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](http://gruntjs.com/)
 
 With the next major release of Grunt, we will no longer support these APIs.  Where possible, please use the recommended modules in their place.  If you would like to support or improve any of these APIs, please notify us when you have published a backwards compatible npm module&mdash;we will then recommend its usage here.
 

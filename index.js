@@ -22,7 +22,7 @@ util.namespace = require('getobject');
 // External libs.
 util.hooker = require('hooker');
 util.async = require('async');
-var _ = util._ = require('lodash');
+var _ = util._ = Object.create(require('lodash'));
 var which = require('which').sync;
 // Instead of process.exit. See https://github.com/cowboy/node-exit
 util.exit = require('exit');

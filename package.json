@@ -24,7 +24,7 @@
     "legacy"
   ],
   "dependencies": {
-    "async": "~2.6.0",
+    "async": "~1.5.2",
     "exit": "~0.1.1",
     "getobject": "~0.1.0",
     "hooker": "~0.2.3",

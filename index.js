@@ -68,7 +68,7 @@ util.normalizelf = function(str) {
 // What "kind" is a value?
 // I really need to rework https://github.com/cowboy/javascript-getclass
 var kindsOf = {};
-'Number String Boolean Function RegExp Array Date Error'.split(' ').forEach(function(k) {
+'Number String Boolean Function AsyncFunction RegExp Array Date Error'.split(' ').forEach(function(k) {
   kindsOf['[object ' + k + ']'] = k.toLowerCase();
 });
 util.kindOf = function(value) {

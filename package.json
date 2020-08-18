@@ -17,7 +17,7 @@
     "test": "grunt test"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 8"
   },
   "keywords": [
     "grunt",
@@ -28,16 +28,16 @@
     "exit": "~0.1.1",
     "getobject": "~0.1.0",
     "hooker": "~0.2.3",
-    "lodash": "~4.17.10",
-    "underscore.string": "~3.3.4",
+    "lodash": "~4.17.20",
+    "underscore.string": "~3.3.5",
     "which": "~1.3.0"
   },
   "devDependencies": {
-    "grunt": "^1.0.2",
-    "grunt-cli": "^1.2.0",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-nodeunit": "^2.0.0",
-    "grunt-contrib-watch": "^1.0.0",
+    "grunt": "^1.2.1",
+    "grunt-cli": "^1.3.2",
+    "grunt-contrib-jshint": "^2.1.0",
+    "grunt-contrib-nodeunit": "^2.1.0",
+    "grunt-contrib-watch": "^1.1.0",
     "temporary": "0.0.8"
   }
 }

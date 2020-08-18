@@ -183,16 +183,16 @@ util.spawn = function(opts, done) {
   }
 
   var child = spawn(cmd, args, opts.opts);
-  var stdout = new Buffer('');
-  var stderr = new Buffer('');
+  var stdout = Buffer.from('');
+  var stderr = Buffer.from('');
   if (child.stdout) {
     child.stdout.on('data', function(buf) {
-      stdout = Buffer.concat([stdout, new Buffer(buf)]);
+      stdout = Buffer.concat([stdout, Buffer.from(buf)]);
     });
   }
   if (child.stderr) {
     child.stderr.on('data', function(buf) {
-      stderr = Buffer.concat([stderr, new Buffer(buf)]);
+      stderr = Buffer.concat([stderr, Buffer.from(buf)]);
     });
   }
   child.on('close', function(code) {

@@ -52,7 +52,7 @@ util.callbackify = function(fn) {
 // Create a new Error object, with an origError property that will be dumped
 // if grunt was run with the --debug=9 option.
 util.error = function(err, origError) {
-  if (!nodeUtil.isError(err)) { err = new Error(err); }
+  if (!(err instanceof Error)) { err = new Error(err); }
   if (origError) { err.origError = origError; }
   return err;
 };

@@ -1,3 +1,9 @@
+- v2.0.2:
+  - date: 2026-04-07
+  - changes:
+    - Update "lodash" to fix security warning ([#35](https://github.com/gruntjs/grunt-legacy-log/issues/35))
+    - Avoid `util.isError` to fix Node.js 24 support
+    - Replace "exit" with "exit-x" to fix license metadata
 - v2.0.1:
   - date: 2021-04-22
   - changes:

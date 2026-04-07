@@ -182,6 +182,8 @@ exports['util.spawn'] = {
     var win32 = process.platform === 'win32';
     util.spawn({
       cmd: 'test\\fixtures\\exec' + (win32 ? '.cmd' : '.sh'),
+      // Fix Node.js 18+ on Windows, https://github.com/nodejs/node/issues/52554
+      opts: { shell: true }
     }, function(err, result, code) {
       test.equals(err, null);
       test.equals(code, 0);
@@ -197,7 +199,11 @@ exports['util.spawn'] = {
     var win32 = process.platform === 'win32';
     util.spawn({
       cmd: './exec' + (win32 ? '.cmd' : '.sh'),
-      opts: {cwd: 'test/fixtures'},
+      opts: {
+        cwd: 'test/fixtures',
+        // Fix Node.js 18+ on Windows, https://github.com/nodejs/node/issues/52554
+        shell: true
+      },
     }, function(err, result, code) {
       test.equals(err, null);
       test.equals(code, 0);

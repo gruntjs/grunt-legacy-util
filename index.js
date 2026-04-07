@@ -11,7 +11,6 @@
 
 // Nodejs libs.
 var spawn = require('child_process').spawn;
-var nodeUtil = require('util');
 var path = require('path');
 
 // The module to be exported.

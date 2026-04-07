@@ -25,7 +25,7 @@
   ],
   "dependencies": {
     "async": "~3.2.0",
-    "exit": "~0.1.2",
+    "exit-x": "~0.2.2",
     "getobject": "~1.0.0",
     "hooker": "~0.2.3",
     "lodash": "^4.18.0",

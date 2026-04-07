@@ -24,8 +24,8 @@ util.async = require('async');
 // Dont pollute other lodash: https://github.com/gruntjs/grunt-legacy-util/issues/17
 var _ = util._ = require('lodash').runInContext();
 var which = require('which').sync;
-// Instead of process.exit. See https://github.com/cowboy/node-exit
-util.exit = require('exit');
+// Instead of process.exit. See https://github.com/gruntjs/node-exit-x
+util.exit = require('exit-x');
 
 // Mixin Underscore.string methods.
 _.str = require('underscore.string');
